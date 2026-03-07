@@ -22,8 +22,8 @@ def emot_detector():
     response = emotion_detector(text_to_analyze)
 
     # Error handling for dominant_emotion is None.
-    """if response['dominant_emotion'] is None:
-        return (f"<b>Invalid text! Please try again!<b>")"""
+    if response['dominant_emotion'] is None:
+        return "<b>Invalid text! Please try again!<b>"
 
     # The response.
     return (
