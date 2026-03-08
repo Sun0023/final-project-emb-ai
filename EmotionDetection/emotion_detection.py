@@ -21,27 +21,21 @@ def emotion_detector(text_to_analyse):
     myobject = { "raw_document": { "text": text_to_analyse } }
 
     # Use the post method
-    response = requests.post(url, json = myobject, headers = headers)
+    response = requests.post(url, json=myobject, headers=headers)
+
+    # Error handling for status code 400.
+    if response.status_code == 400:
+        return ({'anger': None, 'disgust': None, 'fear': None, 'joy': None, 'sadness': None, 'dominant_emotion': None})
+
 
     # Return the respons in the text format.
     # Formatting the text to json.
-    formatted_response = response.json()
+    formatted_response = json.loads(response.text)
 
     # Extrating emotion.
     # "formatted_response" has two key values, with nested list and dictionaries inside. 
     # Use get('key') method to extract the values of dictionary from a list inside a dictionary.
     emotions = formatted_response['emotionPredictions'][0].get('emotion')
-
-    # Error handling for 400 status code.
-    if response.status_code == 400:
-        return {
-            'anger': None,
-            'disgust': None,
-            'fear': None,
-            'joy': None,
-            'sadness': None,
-            'dominant_emotion': None
-        }
 
     # Extract dominant emotion with max(data, key=data.get) method.
     dominant_emotion = max(emotions, key = emotions.get)
@@ -50,4 +44,11 @@ def emotion_detector(text_to_analyse):
     emotions['dominant_emotion'] = dominant_emotion 
 
     # Now get the emotions. Really?
-    return emotions 
+    return {
+        'anger': emotions['anger'],
+        'disgust': emotions['disgust'],
+        'fear': emotions['fear'],
+        'joy': emotions['joy'],
+        'sadness': emotions['sadness'],
+        'dominant_emotion': emotions['dominant_emotion']
+    }

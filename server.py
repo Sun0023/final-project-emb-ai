@@ -36,8 +36,10 @@ def emot_detector():
         f"The dominant emotion is <b>{response['dominant_emotion']}<b>."
     )
 
-    
+# Define flask app for index page.
 @app.route("/")
+
+# Define index page function.
 def render_index_page():
     ''' This function initiates the rendering of the main application
         page over the Flask channel
